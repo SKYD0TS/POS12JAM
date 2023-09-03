@@ -5,9 +5,9 @@
         </div>
         <div class="btn-group">
             <li><button class="dropdown-toggle bg-transparent border-0"
-                    data-bs-toggle="dropdown">{{ auth()->user()->name ?? 'no acc/dev' }}</button>
+                    data-bs-toggle="dropdown">{{ auth()->user()->person->username ?? 'no acc/dev' }}</button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                    <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                 </ul>
             </li>
         </div>
