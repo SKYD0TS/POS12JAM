@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('person_id');
+            $table->unsignedBigInteger('person_id');
+            $table->foreign('person_id')->references('id')->on('people');
             $table->string('email')->nullable()->unique();
-            $table->string('customer_code',50)->unique();
+            $table->string('customer_code', 50)->unique();
             $table->timestamps();
         });
     }

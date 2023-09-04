@@ -10,6 +10,24 @@
     </tbody>
 </table>
 
+<div id="delete-modal" class="modal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h1 class="modal-title text-white fs-5" id="staticBackdropLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-danger" confirm-delete>Hapus</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
     {{-- ?VARIABLES --}}
     <script>
@@ -29,12 +47,11 @@
 
                 formColumns = response.formColumns
 
-                response.columns.unshift(response.columns[0])
-
-                response.columns[1] = ({
+                response.columns.unshift({
                     name: 'index',
+                    searchable: false,
                     title: '#',
-                    orderData: 0,
+                    orderData: 1,
                     defaultContent: "",
                 })
 
@@ -53,7 +70,7 @@
                     pagingType: "full_numbers",
                     ajax: {
                         'type': 'POST',
-                        'url': "/api/" + '{{ $modeldata['header'] }}',
+                        'url': "/api/" + '{{ $modeldata['header'] }}'
                     },
                     columns: response.columns,
                     columnDefs: [{
@@ -86,6 +103,10 @@
                         let pageInfo = dt.page.info()
                         let newIndex = index + pageInfo.page * pageInfo.length
                         $("td:eq(0)", row).html(newIndex + 1)
+                        $('td.actions', row).html(
+                            `<button class="btn btn-info btn-edit" data-modal_mode="edit">Edit</button>
+                            <button class="btn btn-danger btn-delete">Hapus</button>`
+                        )
                     },
                     initComplete: function(settings, json) {
                         // Attach the xhr event handler
@@ -132,7 +153,6 @@
 
 
         $('#model-modal').on('show.bs.modal', function(e) {
-
             const modal = $(e.target),
                 mode = modalCaller.data('modal_mode'),
                 modalTitle = modal.find('.modal-title').text('Tambah data')
@@ -158,6 +178,7 @@
                     cleanform()
                 })
             }
+
             submitOnEnter()
         })
     </script>
@@ -165,6 +186,8 @@
     {{-- ?FORM SUBMIT HANDLER --}}
     <script>
         $('#model-modal').on('click', '.btn-form_submit', function(e) {
+            const btn = $(e.target)
+            btn.addClass('disabled')
             $.ajax({
                 url: form.attr('action'),
                 method: form.attr('method'),
@@ -174,6 +197,8 @@
                 data: form.serialize(),
                 success: function(res) {
                     console.log(res, res.success)
+                    btn.removeClass('disabled')
+
                     if (typeof res.errors !== 'undefined') {
                         $.each(res.errors, function(key, value) {
                             let errorInput = $('[name=' + key + ']');
@@ -184,6 +209,13 @@
                         table.ajax.reload()
                         toastr.options.timeOut = 3000
                         Command: toastr["success"](`${res.success}`)
+                        // $('#model-datatable_filter').find("[type='search']").val()
+                        btn.removeClass('disabled')
+                        const firstField = form.find('.form-control').first(),
+                            firstFieldName = firstField.attr('name')
+
+                        // column(`${firstFieldName}:name`)
+                        table.search(firstField.val()).draw()
                         $('#model-modal').modal('hide')
 
                         //?Clean input from form
@@ -195,37 +227,39 @@
                 }
             })
         })
-
+        console.log()
+        let delId;
         $(`#${table_id}`).on('click', '.btn-delete', function(e) {
-            const dname = '{{ $dname ?? ':eq(2)' }}'
-            btn = $(this),
+            const dname = '{{ $dname ?? ':eq(2)' }}',
+                btn = $(this),
                 row = btn.closest('tr'),
-                id = row.find('.id').text(),
-                name = row.find(`${dname}`).text(),
-                deleteConfirmButton = '<button confirm-delete class="btn btn-sm btn-danger">Hapus</button>'
+                name = row.find(`${dname}`).text()
 
-            toastr.options.timeOut = 5000
-            Command: toastr["warning"](deleteConfirmButton,
-                `Hapus Data <span class='badge bg-danger'>${name}</span>?`)
+            delId = row.find('.id').text()
+            $("#delete-modal").find('.modal-title').text('Hapus data?')
+            $("#delete-modal").find('.modal-body').html('Hapus data <span class="badge bg-danger">' + name +
+                '</span>?')
+            $("#delete-modal").modal('show')
+        })
+        $(document).on('click', 'button[confirm-delete]', function(e) {
+            $("#delete-modal").modal('hide')
+            $.ajax({
+                url: '/dashboard/' + '{{ $modeldata['header'] }}/' + delId,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(s) {
+                    table.ajax.reload()
+                    Command: toastr["success"](`data berhasil dihapus`)
 
-
-            $(document).on('click', 'button[confirm-delete]', function(e) {
-                console.log('delete ' + name)
-                $.ajax({
-                    url: '/dashboard/' + '{{ $modeldata['header'] }}/' + id,
-                    type: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(s) {
-                        table.ajax.reload()
-                    },
-                    error: function(e) {
-                        console.log(e)
-                    }
-                })
-            })
-
+                },
+                error: function(e) {
+                    // btn.removeClass('disabled')
+                    console.log(e)
+                    $("#delete-modal").modal('hide')
+                }
+            }).done()
         })
     </script>
 

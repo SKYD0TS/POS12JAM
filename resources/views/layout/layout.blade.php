@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{{ asset('Assets/datatables') }}/datatables.min.css">
     <link rel="stylesheet" href="{{ asset('Assets/bootstrap') }}/bootstrap.min.css">
     <link rel="stylesheet" href="{{ asset('Assets/toastr') }}/toastr.min.css">
+    <link rel="stylesheet" href="{{ asset('Assets/select2') }}/select2.min.css">
     <link rel="stylesheet" href="{{ asset('Assets/css') }}/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 
@@ -34,10 +35,11 @@
     <script src="{{ asset('Assets/datatables') }}/datatables.min.js"></script>
     <script src="{{ asset('Assets/toastr') }}/toastr.min.js"></script>
     <script src="{{ asset('Assets/bootstrap') }}/bootstrap.bundle.min.js"></script>
-
-    @stack('scripts')
-
+    <script src="{{ asset('Assets/select2') }}/select2.min.js"></script>
     <script>
+        $('.select-searchable').select2({
+            dropdownParent: $('#model-modal')
+        });
         toastr.options = {
             "closeButton": true,
             "debug": false,
@@ -56,6 +58,8 @@
             "hideMethod": "fadeOut"
         }
     </script>
+    @stack('scripts')
+
 </body>
 
 </html>

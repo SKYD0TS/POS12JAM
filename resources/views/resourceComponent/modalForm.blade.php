@@ -23,10 +23,41 @@
                                 <label for={{ $col['name'] }}>{{ $col['label'] }}</label>
                                 <div class="invalid-feedback"></div>
                             </div>
+                        @elseif($col['input_type'] == 'NewOrExist')
+                            <div class="form-check form-switch mb-4">
+                                <input class="form-check-input" name={{ $col['name'] }} type="checkbox"
+                                    id={{ $col['name'] }}
+                                    @isset($col['inputs'])
+                                        data-inputs='{{ implode(',', $col['inputs']) }}'
+                                    @endisset>
+                                <label class="form-check-label" for={{ $col['name'] }}>
+                                    {{ $col['title'] }}
+                                </label>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                            <label for={{ $col['label'] }} class="form-label">{{ $col['label'] }}</label>
+                            <select class="form-select select-searchable" data-dropdown-parent="#modalName"
+                                data-plugin-selectTwo id="search-exist-{{ $col['name'] }}">
+                            </select>
                         @elseif($col['input_type'] == 'select_dropdown')
                             <div class="mb-4">
                                 <label for={{ $col['label'] }} class="form-label">{{ $col['label'] }}</label>
                                 <select class="form-select " name={{ $col['name'] }}>
+                                    <option value=''selected>-</option>
+                                    @foreach ($col['selections'] as $option)
+                                        @if (old($col['name']) == $option->id)
+                                            <option value={{ $option->id }} selected>{{ $option->name }}</option>
+                                        @else
+                                            <option value={{ $option->id }}>{{ $option->name }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback"></div>
+                            </div>
+                        @elseif($col['input_type'] == 'select_search')
+                            <div class="mb-4">
+                                <label for={{ $col['label'] }} class="form-label">{{ $col['label'] }}</label>
+                                <select class="form-select select-searchable" name={{ $col['name'] }}>
                                     <option value=''selected>-</option>
                                     @foreach ($col['selections'] as $option)
                                         @if (old($col['name']) == $option->id)
@@ -49,3 +80,25 @@
         </div>
     </div>
 </div>
+@push('scripts')
+    <script>
+        const NoE = $('#NewOrExist'),
+            inputs = NoE.data('inputs').split(',')
+
+        NoE.on('change', function(e) {
+            console.log($(e.target).is(':checked'))
+            $('.select-searchable').select2({
+                dropdownParent: $('#model-modal')
+            });
+            if ($(e.target).is(':checked')) {
+                inputs.forEach(function(i) {
+                    $(`#${i}`).hide("fast")
+                })
+            } else {
+                inputs.forEach(function(i) {
+                    $(`#${i}`).show("fast")
+                })
+            }
+        })
+    </script>
+@endpush

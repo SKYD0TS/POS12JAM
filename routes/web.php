@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
@@ -23,6 +24,10 @@ use App\Models\Employee;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/', [LoginController::class, 'index']);
+Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::resource('/dashboard/products', ProductController::class);
 Route::resource('/dashboard/items', ItemController::class);

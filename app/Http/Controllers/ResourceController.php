@@ -14,52 +14,71 @@ use App\Models\Supplier;
 use App\Models\Unit;
 use Exception;
 use Illuminate\Support\Facades\Validator;
+use Nette\Utils\Strings;
 
 trait ResourceController
 {
     private $model;
     private $header;
 
+    private $modelClasses = [
+        'products' => Product::class,
+        'categories' => Category::class,
+        'items' => Item::class,
+        'units' => Unit::class,
+        'roles' => Role::class,
+        'employees' => Employee::class,
+        'customers' => Customer::class,
+        'people' => Person::class,
+        'suppliers' => Supplier::class,
+    ];
+
     private function getModelClass($modelName)
     {
-        switch ($modelName) {
-            case 'products':
-                return new Product();
-                break;
-            case 'categories':
-                return new Category();
-                break;
-            case 'items':
-                return new Item();
-                break;
-            case 'units':
-                return new Unit();
-                break;
-            case 'roles':
-                return new Role();
-                break;
-            case 'employees':
-                return new Employee();
-                break;
-            case 'customers':
-                return new Customer();
-                break;
-            case 'people':
-                return new Person();
-                break;
-            case 'suppliers':
-                return new Supplier();
-                break;
-            default:
-                // return new Product();
-                return throw new Exception('not found');
+        if (array_key_exists($modelName, $this->modelClasses)) {
+            $this->model = new $this->modelClasses[$modelName];
         }
+
+        // switch ($modelName) {
+        //     case 'products':
+        //         return new Product();
+        //         break;
+        //     case 'categories':
+        //         return new Category();
+        //         break;
+        //     case 'items':
+        //         return new Item();
+        //         break;
+        //     case 'units':
+        //         return new Unit();
+        //         break;
+        //     case 'roles':
+        //         return new Role();
+        //         break;
+        //     case 'employees':
+        //         return new Employee();
+        //         break;
+        //     case 'customers':
+        //         return new Customer();
+        //         break;
+        //     case 'people':
+        //         return new Person();
+        //         break;
+        //     case 'suppliers':
+        //         return new Supplier();
+        //         break;
+        //     default:
+        //         // return new Product();
+        //         return throw new Exception('not found');
+        // }
     }
+
     public function __construct()
     {
+        // dd(explode('/', request()->url()));
         $modelName = strtolower(request()->segment(2));
         $this->header = $modelName;
-        $this->model = $this->getModelClass($modelName);
+        $this->getModelClass($modelName);
     }
 
 

@@ -36,4 +36,28 @@ class Person extends Model
     {
         return ['customer', 'employee.role'];
     }
+
+    public static function getFormColumns()
+    {
+        return [
+            ['label' => 'Nama awal', 'name' => 'first_name', 'type' => 'text', 'input_type' => 'reg'],
+            ['label' => 'Nama akhir', 'name' => 'last_name', 'type' => 'text', 'input_type' => 'reg'],
+            ['label' => 'Username', 'name' => 'username', 'type' => 'text', 'input_type' => 'reg'],
+            ['label' => 'Nomor Telepon', 'name' => 'phone', 'type' => 'number', 'input_type' => 'reg'],
+            ['label' => 'Alamat', 'name' => 'address', 'type' => 'text', 'input_type' => 'textbox'],
+        ];
+    }
+
+
+    public static function getRules()
+    {
+        return [
+            'name' => 'required|min:2',
+        ];
+    }
+
+    public function getErrorMessages()
+    {
+        return [];
+    }
 }

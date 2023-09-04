@@ -25,7 +25,7 @@ class Category extends Model
         ];
     }
 
-    public static function getRelatedTables()
+    public static function getRelatedModel()
     {
         return [];
     }
@@ -33,7 +33,7 @@ class Category extends Model
     public static function getFormColumns()
     {
         return [
-            ['label' => 'Name', 'name' => 'name', 'type' => 'text', 'input_type' => 'reg'],
+            ['label' => 'Nama', 'name' => 'name', 'type' => 'text', 'input_type' => 'reg'],
         ];
     }
     public static function getRules()
