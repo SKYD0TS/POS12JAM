@@ -17,22 +17,18 @@
         }
 
         .login-card {
+            position: relative;
+            width: 30%;
+            height: 50%;
+            border: 1px solid black;
             display: flex;
             flex-direction: column;
-            position: relative;
-
-            width: 30%;
-            height: fit-content;
-            min-height: 60%;
-            border: 1px solid black;
             background-color: white;
             padding: 1.75rem;
 
             left: 50%;
             top: 50%;
-            transform: translate(-50%, -50%);
-
-            justify-content: space-between;
+            transform: translate(-50%, -50%)
         }
 
         .login-card-header {
@@ -46,25 +42,20 @@
 
         .login-card-footer {
             display: flex;
-            bottom: 0px;
             justify-content: center;
-        }
-
-        .login-card-dialog {
-            height: 100%;
         }
     </style>
 </head>
 
 <body>
-
-    <form id="login-form" class="login-card rounded-1" method="POST" action='#' onsubmit="return false;">
-        <div>
-            <div class="login-card-header mb-4">
-                <h1 class="modal-title rounded-1 text-center">Login</h1>
+    <div class="login-card card">
+        <form id="login-form" method="POST" action='#' onsubmit="return false;">
+            <div class="login-card-header">
+                <h1 class="modal-title text-center">Login</h1>
             </div>
-            <div class="login-card-body border-top">
-                <div class="mt-4" id="loginAlertDiv"></div>
+            <hr>
+            <div class="login-card-body">
+                <div id="loginAlertDiv"></div>
                 <div class="form-floating mb-4">
                     <input type="email" class="form-control" name="email" id="email"
                         placeholder="name@example.com">
@@ -77,12 +68,12 @@
                     <div class="invalid-feedback"></div>
                 </div>
             </div>
-        </div>
-
-        <div class="login-card-footer border-top">
-            <button type="submit" id="login-button" class="btn btn-primary mt-4 w-50">Login</button>
-        </div>
-    </form>
+            <hr class="w-75 mx-auto">
+            <div class="login-card-footer">
+                <button type="submit" id="login-button" class="btn btn-primary w-50">Login</button>
+            </div>
+        </form>
+    </div>
     <script src="{{ asset('Assets/jquery') }}/jquery-3.7.0.js"></script>
     <script src="{{ asset('Assets/bootstrap') }}/bootstrap.bundle.min.js"></script>
     <script>
