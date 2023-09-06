@@ -12,6 +12,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UnitController;
+use App\Models\Customer;
 use App\Models\Employee;
 
 /*
@@ -28,6 +29,12 @@ use App\Models\Employee;
 Route::get('/', [LoginController::class, 'index']);
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+Route::get('/test', function () {
+    $fc = new Customer();
+    $fc = $fc->getFormColumns();
+    return view('test.test', ['formColumns' => $fc, 'modeldata' => ['header' => 'customers']]);
+});
 
 Route::resource('/dashboard/products', ProductController::class);
 Route::resource('/dashboard/items', ItemController::class);

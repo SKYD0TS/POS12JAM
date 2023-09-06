@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::POST('{model}', [APIController::class, 'apiHandler']);
+Route::get('/selectsearch/{model}', [APIController::class, 'selectSearch'])->name('selectSearch');

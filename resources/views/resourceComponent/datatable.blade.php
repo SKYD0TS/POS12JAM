@@ -144,7 +144,6 @@
     {{-- ?MODAL HANDLER --}}
     <script>
         let modalCaller;
-
         $(document).on('click', '.btn-add, .btn-edit', function(e) {
             modalCaller = $(e.target)
             console.log(modalCaller)
@@ -157,11 +156,13 @@
                 mode = modalCaller.data('modal_mode'),
                 modalTitle = modal.find('.modal-title').text('Tambah data')
 
-            if (mode == 'create') {
+            modal.focus();
+
+            if (modalCaller.is('.btn-add')) {
                 form.attr('action', '{{ url()->full() }}')
                 $('#form-method').text('')
 
-            } else if (mode == 'edit') {
+            } else if (modalCaller.is('.btn-edit')) {
                 const row = modalCaller.closest('tr'),
                     id = row.find('.id').text(),
                     modalTitle = modal.find('.modal-title').text('Edit data')
@@ -178,8 +179,6 @@
                     cleanform()
                 })
             }
-
-            submitOnEnter()
         })
     </script>
 
@@ -277,16 +276,5 @@
             $(this).removeClass('is-invalid');
             $(this).siblings('.invalid-feedback').text('');
         });
-
-        // ?Self explanatory
-        function submitOnEnter() {
-            $(document).on('keydown', function(e) {
-                if (e.keyCode === 13 && !e.shiftKey) {
-                    // trigger click event on button
-                    // console.log('submitted')
-                    $('.btn-form_submit').click();
-                }
-            });
-        }
     </script>
 @endpush

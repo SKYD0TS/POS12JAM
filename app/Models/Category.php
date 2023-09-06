@@ -25,7 +25,7 @@ class Category extends Model
         ];
     }
 
-    public static function getRelatedModel()
+    public static function getRelatedModelsName()
     {
         return [];
     }
@@ -46,5 +46,10 @@ class Category extends Model
     public function getErrorMessages()
     {
         return [];
+    }
+
+    public static function getSelectSearchColumns()
+    {
+        return ['id', 'name'];
     }
 }

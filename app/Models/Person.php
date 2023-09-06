@@ -20,19 +20,19 @@ class Person extends Model
         return $this->hasOne(Employee::class, 'person_id', 'id');
     }
 
-    public function getColumns()
+    public static function getColumns()
     {
         return [
-            ['data' => 'id', 'name' => 'id', 'title' => '', 'className' => 'id', 'className' => 'id hidden-column'],
+            ['data' => 'id', 'name' => 'id', 'title' => '', 'className' => 'id', 'className' => 'id hidden-column', 'searchable' => 'false'],
             ['data' => 'username', 'name' => 'username', 'title' => 'Nama', 'className' => 'username'],
             ['data' => 'phone', 'name' => 'phone', 'title' => 'Nomor Telepon', 'className' => 'phone'],
-            ['data' => 'address', 'name' => 'address', 'title' => 'Alamat', 'className' => 'address'],
+            ['data' => 'address', 'name' => 'address', 'title' => 'Alamat', 'className' => 'address', 'orderable' => 'false'],
             ['data' => 'customer.customer_code', 'name' => 'customer.customer_code', 'title' => 'Pelanggan', 'className' => 'customer_customer_code'],
             ['data' => 'employee.role.name', 'name' => 'employee.role.name', 'title' => 'Pegawai', 'className' => 'employee_role_name'],
         ];
     }
 
-    public function getRelatedTables()
+    public static function getRelatedModelsName()
     {
         return ['customer', 'employee.role'];
     }
@@ -56,8 +56,13 @@ class Person extends Model
         ];
     }
 
-    public function getErrorMessages()
+    public static function getErrorMessages()
     {
         return [];
+    }
+
+    public static function getSelectSearchColumns()
+    {
+        return ['id', 'username', 'phone'];
     }
 }
