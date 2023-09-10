@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
 
         foreach (range(1, 4) as $i) {
             \App\Models\Supplier::create(
-                ['name' => $fakefr->lastName .'_'. $fakefr->word(1)],
+                ['name' => $fakefr->lastName . '_' . $fakefr->word(1)],
             );
         }
 
@@ -42,10 +42,16 @@ class DatabaseSeeder extends Seeder
         \App\Models\Role::create(
             ['name' => 'CASHIER'],
         );
+        \App\Models\Role::create(
+            ['name' => 'AW'],
+        );
+        \App\Models\Role::create(
+            ['name' => 'AE'],
+        );
 
         // Create people
         $peeps = [];
-        foreach (range(1, 5) as $i) {
+        foreach (range(1, 6) as $i) {
             $peeps[] = \App\Models\Person::create([
                 'first_name' => $fake->firstName,
                 'last_name' => $fake->lastName,
@@ -54,18 +60,42 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        $peeps[1]->employee()->create([
+            'email' => 'a1@gmail.com',
+            'password' => Hash::make('password'),
+            'role_id' => 1 // 'ADMIN'
+        ]);
+
+        $peeps[2]->employee()->create([
+            'email' => 'c1@gmail.com',
+            'password' => Hash::make('password'),
+            'role_id' => 2
+        ]);
+
+        $peeps[3]->employee()->create([
+            'email' => 'c2@gmail.com',
+            'password' => Hash::make('password'),
+            'role_id' => 2
+        ]);
+
+
+        $peeps[5]->customer()->create([
+            'email' => $fake->optional()->email,
+            'customer_code' => $fake->unique()->isbn10
+        ]);
+
         // Iterate through people and make employees and customer
-        foreach ($peeps as $p) {
-            $p->employee()->create([
-                'email' => $fake->unique()->email,
-                'password' => Hash::make('password'),
-                'role_id' => rand(0, 1)
-            ]);
-            $p->customer()->create([
-                'email' => $fake->optional()->email,
-                'customer_code' => $fake->unique()->isbn10
-            ]);
-        }
+        // foreach ($peeps as $p) {
+        //     $p->employee()->create([
+        //         'email' => $fake->unique()->email,
+        //         'password' => Hash::make('password'),
+        //         'role_id' => rand(1, 2)
+        //     ]);
+        //     $p->customer()->create([
+        //         'email' => $fake->optional()->email,
+        //         'customer_code' => $fake->unique()->isbn10
+        //     ]);
+        // }
 
         // Make Products
         $prods = [];

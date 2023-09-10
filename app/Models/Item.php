@@ -29,7 +29,7 @@ class Item extends Model
     }
 
 
-    public function getColumns()
+    public static function getColumns()
     {
         return [
             ['data' => 'id', 'name' => 'id', 'title' => '', 'className' => 'id', 'className' => 'id hidden-column'],
@@ -37,16 +37,35 @@ class Item extends Model
             ['data' => 'item_name', 'name' => 'item_name', 'title' => 'Nama Barang', 'className' => 'item_name'],
             ['data' => 'selling_price', 'name' => 'selling_price', 'title' => 'Harga Jual', 'className' => 'selling_price'],
             ['data' => 'capital_price', 'name' => 'capital_price', 'title' => 'Email', 'className' => 'capital_price'],
-            ['data' => 'unit.name', 'name' => 'unit.name', 'title' => 'Nama Unit', 'className' => 'unit_name'],
+            ['data' => 'unit.name', 'name' => 'unit.name', 'title' => 'Unit', 'className' => 'unit_name'],
             ['data' => 'stock', 'name' => 'stock', 'title' => 'Stock', 'className' => 'stock'],
-            ['data' => 'withdrawn', 'name' => 'withdrawn', 'title' => 'Withdrawn', 'className' => 'withdrawn'],
+            ['data' => 'withdrawn', 'name' => 'withdrawn', 'title' => 'Dikembalikan', 'className' => 'withdrawn'],
             ['data' => 'category.name', 'name' => 'category.name', 'title' => 'Kategori', 'className' => 'category_name'],
             ['data' => 'employee.person.username', 'name' => 'employee.person.username', 'title' => 'Pegawai', 'className' => 'employee_name'],
         ];
     }
 
-    public function getRelatedTables()
+    public static function getRelatedModelsName()
     {
         return ['category', 'unit', 'employee.person'];
+    }
+
+    public static function getFormColumns()
+    {
+        return [
+            ['label' => 'Nama', 'name' => 'name', 'type' => 'text', 'input_type' => 'reg'],
+        ];
+    }
+
+    public static function getRules()
+    {
+        return [
+            'name' => 'required|min:2',
+        ];
+    }
+
+    public function getValidationMessages()
+    {
+        return [];
     }
 }

@@ -92,7 +92,8 @@ trait ResourceController
             return view('dashboard.index', [
                 'modeldata' => $modeldata,
                 "dname" => $this->model->dname,
-                'formColumns' => $this->model::getFormColumns()
+                'formColumns' => $this->model::getFormColumns(),
+                'formRules' => $this->model::getRules()
             ]);
         } catch (Exception $e) {
             return $e->getCode() . $e->getMessage();
@@ -112,8 +113,7 @@ trait ResourceController
      */
     public function store(Request $request)
     {
-
-        $validator = Validator::make($request->all(), $this->model->getRules(), $this->model->getErrorMessages());
+        $validator = Validator::make($request->all(), $this->model->getRules(), $this->model->getValidationMessages());
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
         } else {
@@ -147,12 +147,13 @@ trait ResourceController
      */
     public function update(Request $request, string $id)
     {
-        $validator = Validator::make($request->all(), $this->model->getRules(), $this->model->getErrorMessages());
+        $validator = Validator::make($request->all(), $this->model->getRules(), $this->model->getValidationMessages());
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
         }
         try {
             $this->model->find($id)->update($request->all());
+            return response()->json(['success' => 'Data berhasil di ubah']);
         } catch (Exception $e) {
             return 'exception: ' . $e->getMessage() . ' ' . $e->getCode();
         }
@@ -165,6 +166,7 @@ trait ResourceController
     {
         try {
             $this->model::destroy($id);
+            return response()->json(['success' => 'Data berhasil di hapus']);
         } catch (Exception $e) {
             return 'exception: ' . $e->getMessage() . ' ' . $e->getCode();
         }

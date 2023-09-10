@@ -7,36 +7,48 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap');
+    </style>
+
     <link rel="stylesheet" href="{{ asset('Assets/bootstrap') }}/bootstrap.min.css">
     <style>
         body {
-            background-color: aliceblue;
+            font-family: 'IBM Plex Sans', sans-serif;
             height: 100vh;
             width: 100vw;
             margin: 0px;
+            background: linear-gradient(0deg, rgba(9, 78, 129, 1) 0%, rgba(235, 255, 200, 1) 100%);
         }
 
         .login-card {
+            background-color: transparent;
             position: relative;
             width: 30%;
-            height: 50%;
-            border: 1px solid black;
+
             display: flex;
             flex-direction: column;
-            background-color: white;
-            padding: 1.75rem;
-
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%)
         }
 
         .login-card-header {
-            background-color: whitesmoke;
-            border-radius: inherit;
+            background-color: transparent;
+            justify-self: center;
+            margin: 0px auto;
+            width: 75%;
+            background: rgba(90, 90, 90, 0.104);
+            backdrop-filter: blur(2px);
+
+
+            transform: translateY(50%)
         }
 
         .login-card-body {
+            background-color: white;
+            padding: 1.6rem;
+            padding-top: 3.1rem;
             height: 70%;
         }
 
@@ -48,13 +60,12 @@
 </head>
 
 <body>
-    <div class="login-card card">
+    <div class="login-card">
         <form id="login-form" method="POST" action='#' onsubmit="return false;">
-            <div class="login-card-header">
-                <h1 class="modal-title text-center">Login</h1>
+            <div class="login-card-header rounded-4 shadow-sm">
+                <h1 class="modal-title text-center"><span class="d-inline">Login</span></h1>
             </div>
-            <hr>
-            <div class="login-card-body">
+            <div class="login-card-body rounded-4 shadow-lg">
                 <div id="loginAlertDiv"></div>
                 <div class="form-floating mb-4">
                     <input type="email" class="form-control" name="email" id="email"
@@ -67,10 +78,13 @@
                     <label for="password">Password</label>
                     <div class="invalid-feedback"></div>
                 </div>
-            </div>
-            <hr class="w-75 mx-auto">
-            <div class="login-card-footer">
-                <button type="submit" id="login-button" class="btn btn-primary w-50">Login</button>
+                <div class="login-card-footer">
+                    <button type="submit" id="login-button" class="btn btn-primary w-50">Login</button>
+                </div>
+                <a class="mt-3 d-block text-end" data-bs-toggle="collapse" href="#lupa-password">
+                    Lupa password?
+                </a>
+                <div class="collapse text-end fst-italic" id="lupa-password">Kontak admin</div>
             </div>
         </form>
     </div>

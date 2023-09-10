@@ -26,7 +26,7 @@ use App\Models\Employee;
 |
 */
 
-Route::get('/', [LoginController::class, 'index']);
+Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
@@ -36,14 +36,18 @@ Route::get('/test', function () {
     return view('test.test', ['formColumns' => $fc, 'modeldata' => ['header' => 'customers']]);
 });
 
-Route::resource('/dashboard/products', ProductController::class);
-Route::resource('/dashboard/items', ItemController::class);
-Route::resource('/dashboard/categories', CategoryController::class);
-Route::resource('/dashboard/units', UnitController::class);
-Route::resource('/dashboard/suppliers', SupplierController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::middleware(['role:CASHIER'])->group(function () {
+        Route::resource('/dashboard/categories', CategoryController::class);
+    });
+    Route::resource('/dashboard/products', ProductController::class);
+    Route::resource('/dashboard/items', ItemController::class);
+    Route::resource('/dashboard/units', UnitController::class);
+    Route::resource('/dashboard/suppliers', SupplierController::class);
 
-Route::resource('/dashboard/people', PersonController::class);
-Route::resource('/dashboard/roles', RoleController::class);
-Route::resource('/dashboard/employees', EmployeeController::class);
-Route::resource('/dashboard/customers', CustomerController::class);
+    Route::resource('/dashboard/people', PersonController::class);
+    Route::resource('/dashboard/roles', RoleController::class);
+    Route::resource('/dashboard/employees', EmployeeController::class);
+    Route::resource('/dashboard/customers', CustomerController::class);
+});
 // Route::resource('/people', PersonController::class);

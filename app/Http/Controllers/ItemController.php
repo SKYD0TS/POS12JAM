@@ -10,5 +10,4 @@ use App\Http\Controllers\ResourceController;
 class ItemController extends Controller
 {
     use ResourceController;
-
 }

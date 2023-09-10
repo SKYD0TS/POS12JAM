@@ -1,5 +1,5 @@
 @section('sidebar')
-    <div class="sidebar">
+    <div class="sidebar rounded-3">
         <ul>
             <li><a href="/dashboard"><i class="bi bi-app"></i></a></li>
             <div class="btn-group dropend">

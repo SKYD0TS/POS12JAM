@@ -10,6 +10,8 @@ class Person extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function customer()
     {
         return $this->hasOne(Customer::class, 'person_id', 'id');
@@ -43,8 +45,8 @@ class Person extends Model
             ['label' => 'Nama awal', 'name' => 'first_name', 'type' => 'text', 'input_type' => 'reg'],
             ['label' => 'Nama akhir', 'name' => 'last_name', 'type' => 'text', 'input_type' => 'reg'],
             ['label' => 'Username', 'name' => 'username', 'type' => 'text', 'input_type' => 'reg'],
-            ['label' => 'Nomor Telepon', 'name' => 'phone', 'type' => 'number', 'input_type' => 'reg'],
-            ['label' => 'Alamat', 'name' => 'address', 'type' => 'text', 'input_type' => 'textbox'],
+            ['label' => 'Nomor Telepon', 'name' => 'phone', 'type' => 'tel', 'input_type' => 'reg'],
+            ['label' => 'Alamat', 'name' => 'address', 'type' => 'text', 'input_type' => 'textarea'],
         ];
     }
 
@@ -52,7 +54,11 @@ class Person extends Model
     public static function getRules()
     {
         return [
-            'name' => 'required|min:2',
+            'first_name' => 'required|min:2',
+            'last_name' => 'nullable',
+            'username' => 'nullable',
+            'phone' => 'numeric|min:7',
+            'address' => 'nullable'
         ];
     }
 

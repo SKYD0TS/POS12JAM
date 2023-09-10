@@ -43,7 +43,7 @@ class Category extends Model
         ];
     }
 
-    public function getErrorMessages()
+    public function getValidationMessages()
     {
         return [];
     }

@@ -1,4 +1,4 @@
-<table id="model-datatable" border="1">
+<table class="w-100 table table-hover rounded-1" id="model-datatable" border="1">
     <thead>
         <tr>
         </tr>
@@ -32,7 +32,7 @@
     {{-- ?VARIABLES --}}
     <script>
         const form = $('#model-form')
-        let formColumns;
+        let tblColumns;
     </script>
 
     {{-- ?DATATABLES C0NFIG --}}
@@ -45,7 +45,7 @@
             success: function(response) {
                 console.log(response)
 
-                formColumns = response.formColumns
+                tblColumns = response.formColumns
 
                 response.columns.unshift({
                     name: 'index',
@@ -62,7 +62,11 @@
                 })
 
                 table = $(`#${table_id}`).DataTable({
-                    dom: "<lf<t>ip>",
+                    dom: "<<'d-flex justify-content-between px-2 mb-2'fl><rt><ip>>",
+                    oLanguage: {
+                        "sSearch": "Cari :"
+                    },
+                    scrollX: true,
                     processing: true,
                     serverSide: true,
                     paging: true,
@@ -82,7 +86,8 @@
                     }, {
                         targets: '_all',
                         render: function(data, type, row, meta) {
-                            if (meta.settings.aoColumns[meta.col].column_type === 'list') {
+                            if (meta.settings.aoColumns[meta.col].column_type ===
+                                'list') {
                                 const
                                     col = meta.settings.aoColumns[meta.col],
                                     name = col.name.substring(col.data.length + 1),
@@ -159,6 +164,7 @@
             modal.focus();
 
             if (modalCaller.is('.btn-add')) {
+                $('input#password').next('label').find('span').show()
                 form.attr('action', '{{ url()->full() }}')
                 $('#form-method').text('')
 
@@ -169,15 +175,20 @@
 
                 $('#form-method').html('@method('PATCH')')
                 form.find('.form-control').each(function(i) {
-                    let d = row.find(`.${formColumns[i].name}`).text()
+                    console.log($(this))
+                    let d = row.find(`.${tblColumns[i].name}`).text()
+                    d == '[-]' ? d = '' : d = d //check null data
+
                     $(this).val(d)
-                    console.log(formColumns[i].name, d)
+                    console.log(tblColumns[i].name, d)
                 })
                 form.attr('action', `{{ url()->full() }}/${id}`)
 
                 modal.on('hide.bs.modal', function(e) {
+
                     cleanform()
                 })
+                $('input#password').next('label').find('span').hide()
             }
         })
     </script>
@@ -199,22 +210,20 @@
                     btn.removeClass('disabled')
 
                     if (typeof res.errors !== 'undefined') {
-                        $.each(res.errors, function(key, value) {
+                        $.each(res.errors, function(key, message) {
                             let errorInput = $('[name=' + key + ']');
                             errorInput.addClass('is-invalid');
-                            errorInput.siblings('.invalid-feedback').text(value);
+                            errorInput.siblings('.invalid-feedback').text(message);
                         });
                     } else {
                         table.ajax.reload()
                         toastr.options.timeOut = 3000
                         Command: toastr["success"](`${res.success}`)
-                        // $('#model-datatable_filter').find("[type='search']").val()
                         btn.removeClass('disabled')
                         const firstField = form.find('.form-control').first(),
                             firstFieldName = firstField.attr('name')
 
-                        // column(`${firstFieldName}:name`)
-                        table.search(firstField.val()).draw()
+                        // table.search(firstField.val()).draw()
                         $('#model-modal').modal('hide')
 
                         //?Clean input from form
@@ -250,7 +259,7 @@
                 },
                 success: function(s) {
                     table.ajax.reload()
-                    Command: toastr["success"](`data berhasil dihapus`)
+                    Command: toastr["success"](`${s.success}`)
 
                 },
                 error: function(e) {
@@ -266,13 +275,16 @@
     <script>
         // ?Clean form input
         function cleanform() {
+            $('#model-form :input').each((t) => {})
             form.find('.form-control').each(function(i, k) {
                 $(this).val('')
+                $(this).removeClass('is-invalid');
+                $(this).siblings('.invalid-feedback').text('');
             })
         }
 
         // ?Remove errors on type
-        $('#model-form :input').keydown(function() {
+        $('#model-form :input').change(function() {
             $(this).removeClass('is-invalid');
             $(this).siblings('.invalid-feedback').text('');
         });
