@@ -14,15 +14,22 @@ return new class extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('item_code', 50);
-            $table->foreignId('product_id')->unsigned();
+            $table->unsignedBigInteger('product_id');
             $table->string('item_name', 100);
             $table->double('selling_price');
             $table->double('capital_price');
-            $table->foreignId('unit_id')->unsigned();
+            $table->unsignedBigInteger('unit_id');
             $table->integer('stock')->default(0);
-            $table->foreignId('category_id')->unsigned();
+            $table->unsignedBigInteger('category_id');
             $table->integer('withdrawn')->default(0);
-            $table->foreignId('employee_id')->unsigned();
+            $table->unsignedBigInteger('employee_id');
+            $table->unsignedBigInteger('supplier_id');
+            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('unit_id')->references('id')->on('units');
+            $table->foreign('employee_id')->references('id')->on('employees');
+            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('supplier_id')->references('id')->on('suppliers');
+
             $table->timestamps();
         });
     }
