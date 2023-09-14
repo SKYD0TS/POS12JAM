@@ -19,6 +19,6 @@ class RoleCheckMiddleware
             return $next($request);
         }
 
-        return abort(403, 'Unauthorized');
+        return redirect()->back();
     }
 }

@@ -91,7 +91,6 @@ trait ResourceController
             $modeldata['header'] = $this->header;
             return view('dashboard.index', [
                 'modeldata' => $modeldata,
-                "dname" => $this->model->dname,
                 'formColumns' => $this->model::getFormColumns(),
                 'formRules' => $this->model::getRules()
             ]);
@@ -113,7 +112,8 @@ trait ResourceController
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->model->getRules(), $this->model->getValidationMessages());
+        $validationMessage = method_exists($this->model, 'getValidationMessages') ? $this->model->getValidationMessages() : [];
+        $validator = Validator::make($request->all(), $this->model->getRules(), $validationMessage);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
         } else {
@@ -147,7 +147,8 @@ trait ResourceController
      */
     public function update(Request $request, string $id)
     {
-        $validator = Validator::make($request->all(), $this->model->getRules(), $this->model->getValidationMessages());
+        $validationMessage = method_exists($this->model, 'getValidationMessages') ? $this->model->getValidationMessages() : [];
+        $validator = Validator::make($request->all(), $this->model->getRules(), $validationMessage);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()]);
         }
@@ -168,48 +169,11 @@ trait ResourceController
             $this->model::destroy($id);
             return response()->json(['success' => 'Data berhasil di hapus']);
         } catch (Exception $e) {
-            return 'exception: ' . $e->getMessage() . ' ' . $e->getCode();
+            if ($e->getCode() === '23000') {
+                return response()->json(['success' => 'Data tidak boleh di hapus']);
+            } else {
+                return 'exception: ' . $e->getMessage() . ' ' . $e->getCode();
+            }
         }
     }
 }
-
-
-// <form class="form-floating" id="form_id" action="{{ $rows[0]['action'] }}"
-//                     method="{{ $rows[0]['method'] }}">
-//                     @if ($rows[0][0] === 'POST')
-//                         @csrf
-//                     @endif
-//                     <h1>{{ $rows[0]['title'] }}</h1>
-//                     @foreach (array_slice($rows, 1) as $col)
-//                         @if ($col['input_type'] == 'reg')
-//                             <div class="form-floating mb-4">
-//                                 <input type={{ $col['type'] }} name={{ $col['name'] }} class="form-control "
-//                                     id={{ $col['name'] }} placeholder=" " value={{ old($col['name']) }}>
-//                                 <label for={{ $col['name'] }}>{{ $col['label'] }}</label>
-//                                 <div class="invalid-feedback"></div>
-//                             </div>
-//                         @elseif($col['input_type'] == 'textarea')
-//                             <div class="form-floating mb-4">
-//                                 <textarea class="form-control" name={{ $col['name'] }} placeholder=" " id={{ $col['name'] }} style="height: 100px;">{{ old($col['name']) }}</textarea>
-//                                 <label for={{ $col['name'] }}>{{ $col['label'] }}</label>
-//                                 <div class="invalid-feedback"></div>
-//                             </div>
-//                         @elseif($col['input_type'] == 'select_dropdown')
-//                             <div class="mb-4">
-//                                 <label for={{ $col['label'] }} class="form-label">{{ $col['label'] }}</label>
-//                                 <select class="form-select " name={{ $col['name'] }}>
-//                                     <option value=''selected>-</option>
-//                                     @foreach ($col['selections'] as $option)
-//                                         @if (old($col['name']) == $option->id)
-//                                             <option value={{ $option->id }} selected>{{ $option->name }}</option>
-//                                         @else
-//                                             <option value={{ $option->id }}>{{ $option->name }}</option>
-//                                         @endif
-//                                     @endforeach
-//                                 </select>
-//                                 <div class="invalid-feedback"></div>
-//                             </div>
-//                         @endif
-//                     @endforeach
-//                     <input type="submit" value={{ $rows[0][2] }} id="">
-//                 </form>

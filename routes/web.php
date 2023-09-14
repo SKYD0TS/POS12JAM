@@ -26,8 +26,9 @@ use App\Models\Employee;
 |
 */
 
+Route::redirect('/', '/dashboard', 301);
 Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login-check');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/test', function () {
@@ -37,9 +38,9 @@ Route::get('/test', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::middleware(['role:CASHIER'])->group(function () {
-        Route::resource('/dashboard/categories', CategoryController::class);
-    });
+    // Route::middleware(['role:CASHIER'])->group(function () {
+    Route::resource('/dashboard/categories', CategoryController::class);
+    // });
     Route::resource('/dashboard/products', ProductController::class);
     Route::resource('/dashboard/items', ItemController::class);
     Route::resource('/dashboard/units', UnitController::class);

@@ -5,9 +5,15 @@
         </div>
         <div class="btn-group">
             <li>
-                <span class="badge text-bg-info my-auto my-auto">{{ auth()->user()->role->name }}</span>
+                <span class="badge text-bg-info my-auto my-auto">
+                    @if (auth()->user())
+                        {{ auth()->user()->role->name }}
+                    @else
+                        'no acc/dev'
+                    @endif
+                </span>
                 <button class="dropdown-toggle bg-transparent border-0" data-bs-toggle="dropdown">
-                    @if (auth()->user()->person->username)
+                    @if (auth()->user())
                         <span>{{ auth()->user()->person->username }}</span>
                     @else
                         'no acc/dev'

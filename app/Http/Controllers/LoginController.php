@@ -31,7 +31,12 @@ class LoginController extends Controller
                 $validated = $r->only('email', 'password');
                 if (Auth::attempt($validated)) {
                     $r->session()->regenerate();
-                    return response()->json(['LoginSuccess' => '/dashboard']);
+
+                    $intendedUrl = session('url.intended', '/dashboard');
+
+                    return response()->json([
+                        'intendedUrl' => $intendedUrl,
+                    ]);
                 } else {
                     return response()->json(['LoginError' => 'Email atau Password tidak ditemukan']);
                 }
@@ -40,10 +45,10 @@ class LoginController extends Controller
             }
         }
     }
-    public function logout(Request $r)
+    public function logout()
     {
         Auth::logout();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
 }

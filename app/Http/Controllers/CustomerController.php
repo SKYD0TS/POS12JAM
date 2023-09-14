@@ -69,7 +69,6 @@ class CustomerController extends Controller
     {
         try {
             $this->model::destroy($id);
-            $this->model->person::destroy($id);
             return response()->json(['success' => 'Data berhasil di hapus']);
         } catch (Exception $e) {
             return 'exception: ' . $e->getMessage() . ' ' . $e->getCode();

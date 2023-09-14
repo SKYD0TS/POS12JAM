@@ -24,12 +24,11 @@ return new class extends Migration
             $table->integer('withdrawn')->default(0);
             $table->unsignedBigInteger('employee_id');
             $table->unsignedBigInteger('supplier_id');
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('unit_id')->references('id')->on('units');
             $table->foreign('employee_id')->references('id')->on('employees');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->foreign('supplier_id')->references('id')->on('suppliers');
-
             $table->timestamps();
         });
     }

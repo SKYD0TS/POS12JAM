@@ -26,6 +26,8 @@ class Person extends Model
     {
         return [
             ['data' => 'id', 'name' => 'id', 'title' => '', 'className' => 'id', 'className' => 'id hidden-column', 'searchable' => 'false'],
+            ['data' => 'first_name', 'name' => 'first_name', 'title' => 'Nama Awal', 'className' => 'first_name', 'orderable' => 'false'],
+            ['data' => 'last_name', 'name' => 'last_name', 'title' => 'Nama Akhir', 'className' => 'last_name', 'orderable' => 'false'],
             ['data' => 'username', 'name' => 'username', 'title' => 'Nama', 'className' => 'username'],
             ['data' => 'phone', 'name' => 'phone', 'title' => 'Nomor Telepon', 'className' => 'phone'],
             ['data' => 'address', 'name' => 'address', 'title' => 'Alamat', 'className' => 'address', 'orderable' => 'false'],

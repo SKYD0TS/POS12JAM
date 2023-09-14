@@ -36,31 +36,43 @@ class Item extends Model
             ['data' => 'item_code', 'name' => 'item_code', 'title' => 'Kode Barang', 'className' => 'item_code'],
             ['data' => 'item_name', 'name' => 'item_name', 'title' => 'Nama Barang', 'className' => 'item_name'],
             ['data' => 'selling_price', 'name' => 'selling_price', 'title' => 'Harga Jual', 'className' => 'selling_price'],
-            ['data' => 'capital_price', 'name' => 'capital_price', 'title' => 'Email', 'className' => 'capital_price'],
+            ['data' => 'capital_price', 'name' => 'capital_price', 'title' => 'Harga Beli', 'className' => 'capital_price'],
             ['data' => 'unit.name', 'name' => 'unit.name', 'title' => 'Unit', 'className' => 'unit_name'],
             ['data' => 'stock', 'name' => 'stock', 'title' => 'Stock', 'className' => 'stock'],
             ['data' => 'withdrawn', 'name' => 'withdrawn', 'title' => 'Dikembalikan', 'className' => 'withdrawn'],
             ['data' => 'category.name', 'name' => 'category.name', 'title' => 'Kategori', 'className' => 'category_name'],
             ['data' => 'employee.person.username', 'name' => 'employee.person.username', 'title' => 'Pegawai', 'className' => 'employee_name'],
+            ['data' => 'product_id', 'name' => 'product_id', 'title' => '', 'className' => 'product_id hidden-column'],
         ];
     }
 
-    public static function getRelatedModelsName()
-    {
-        return ['category', 'unit', 'employee.person'];
-    }
 
     public static function getFormColumns()
     {
-        return [
-            ['label' => 'Nama', 'name' => 'name', 'type' => 'text', 'input_type' => 'reg'],
-        ];
+        $r = Product::getFormColumns();
+        array_unshift(
+            $r,
+            ['title' => 'Produk yang sudah ada?', 'label' => 'Cari produk', 'name' => 'product_id', 'model' => 'product', 'searchColumns' => ['id', 'name'], 'inputs' => ['name'], 'input_type' => 'NewOrExist'],
+        );
+        $r[] = ['label' => 'Nama barang', 'name' => 'item_name', 'type' => 'text', 'input_type' => 'reg'];
+        $r[] = ['label' => 'Harga Jual', 'name' => 'selling_price', 'type' => 'text', 'input_type' => 'reg'];
+        $r[] = ['label' => 'Unit', 'name' => 'unit.name', 'input_type' => 'select_dropdown', 'selections' => Unit::orderBy('id', 'desc')->get(), 'selection_data' => ['id', 'name']];
+        return $r;
+    }
+    public static function getRelatedModelsName()
+    {
+        return ['category', 'unit', 'employee.person'];
     }
 
     public static function getRules()
     {
         return [
             'name' => 'required|min:2',
+            'item_name' => 'required|min:2',
+            'selling_price' => 'required|min:2',
+            'capital_price' => 'required|min:2',
+            'unit.name' => 'required|',
+
         ];
     }
 

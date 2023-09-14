@@ -99,14 +99,18 @@
     <script>
         $('#login-button').on('click', function(e) {
             $(e.target).addClass('disabled')
-            $.ajax({
-                url: '{{ route('login') }}',
-                type: 'post',
-                data: $('#login-form').serialize(),
+
+            const formData = new FormData(document.getElementById('login-form'));
+            const options = {
+                method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                success: function(r) {
+                body: formData
+            }
+
+            fetch('{{ route('login-check') }}', options).then(response => response.json())
+                .then(r => {
                     if (typeof r.errors !== 'undefined') {
                         $.each(r.errors, function(key, value) {
                             let errorInput = $('[name=' + key + ']');
@@ -114,18 +118,16 @@
                             errorInput.siblings('.invalid-feedback').text(value);
                         })
                     } else if (typeof r.LoginError !== 'undefined') {
-                        appendAlert(r.LoginError, 'danger')
-                    } else if (typeof r.LoginSuccess !== 'undefined') {
-                        window.location.href = r.LoginSuccess
+                        appendAlert(r.LoginError, 'danger');
+                    } else if (typeof r.intendedUrl !== 'undefined') {
+                        window.location.href = r.intendedUrl;
                     }
-                    $(e.target).removeClass('disabled')
-
-                },
-                error: function(r) {
-                    $(e.target).removeClass('disabled')
-                    console.log(r)
-                }
-            })
+                    $(e.target).removeClass('disabled');
+                })
+                .catch(error => {
+                    $(e.target).removeClass('disabled');
+                    console.error(error);
+                });
         })
 
         const loginAlert = $('#loginAlertDiv')

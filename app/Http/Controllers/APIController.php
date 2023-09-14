@@ -98,10 +98,9 @@ class APIController extends Controller
         $model = "\App\Models\\$model";
         $model = new $model();
 
-        $searchColumns = $model::getSelectSearchColumns();
-
         $query = $model::query();
 
+        $searchColumns = $r->searchColumns;
         $searchValue = $r->search;
 
         if (!empty($searchValue)) {

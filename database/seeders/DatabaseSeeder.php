@@ -115,7 +115,8 @@ class DatabaseSeeder extends Seeder
                     'capital_price' => rand(200, 99999),
                     'unit_id' => 1,
                     'category_id' => 1,
-                    'employee_id' => 1
+                    'employee_id' => 1,
+                    'supplier_id' => 2
                 ]);
             }
         }

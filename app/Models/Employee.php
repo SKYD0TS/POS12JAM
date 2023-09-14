@@ -60,17 +60,19 @@ class Employee extends Authenticatable
 
     public static function getRules()
     {
-        return [
-            'first_name' => 'min:2|required|',
-            'last_name' => 'nullable',
-            'email' => 'required|email|unique:employees',
-            'username' => 'nullable',
-            'password' => 'required|confirmed|min:8',
-            'password_confirmation' => 'same:password',
-            'phone' => 'required|numeric|min:7',
-            'address' => 'required',
-            'role_id' => 'required'
-        ];
+        $r = Person::getRules();
+        $r['password'] = 'required|confirmed|min:8';
+        $r['password_confirmation'] = 'same:password';
+        $r['role_id'] = 'required';
+
+        $r['first_name'] = 'required|min:2';
+        $r['last_name'] = 'nullable';
+        $r['email'] = 'required|email|unique:employees';
+        $r['username'] = 'nullable';
+        $r['phone'] = 'required|numeric|min:7';
+        $r['address'] = 'required';
+
+        return $r;
     }
 
     public static function getValidationMessages()
