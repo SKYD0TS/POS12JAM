@@ -29,7 +29,7 @@ class Product extends Model
     public static function getFormColumns()
     {
         return [
-            ['label' => 'Name', 'name' => 'name', 'type' => 'text', 'input_type' => 'reg'],
+            ['label' => 'Nama produk', 'name' => 'name', 'type' => 'text', 'input_type' => 'reg'],
         ];
     }
 

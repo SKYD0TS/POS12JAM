@@ -71,7 +71,7 @@
 
         function createDataTable(response) {
             const columns = response.columns;
-
+            console.log(columns)
             // Add an empty column for index
             columns.unshift({
                 name: 'index',
@@ -132,6 +132,17 @@
          <button class="btn btn-danger btn-delete">Hapus</button>`
                     );
                 },
+                initComplete: function(settings, json) {
+                    // Attach the xhr event handler
+                    var table = this;
+                    $(document).ajaxSend(function(event, xhr, settings) {
+                        console.log('DataTables AJAX request sent:', settings);
+                    });
+                    $(document).ajaxComplete(function(event, xhr, settings) {
+                        console.log('DataTables AJAX response received:', xhr
+                            .responseText);
+                    });
+                }
             });
         }
     </script>

@@ -67,8 +67,6 @@ class APIController extends Controller
                 $totalRecords = $m::count();
 
                 return response()->json([
-                    'a' => $relatedTables,
-                    'p' => explode('.', $columns[$orderColumn]["name"]),
                     'draw' => $draw,
                     'recordsTotal' => $totalRecords,
                     'recordsFiltered' => $filteredRecords,

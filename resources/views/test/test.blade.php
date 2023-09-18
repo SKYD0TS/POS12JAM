@@ -34,11 +34,7 @@
 @endpush
 
 @section('main')
-    @include('resourceComponent.modalForm')
-
     <div class="card">
-        <button class="btn btn-add btn-primary w-25 mb-4" data-modal_mode="create">Tambah</button>
-        {{-- @include('resourceComponent.datatable') --}}
 
         <hr>
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
@@ -50,21 +46,27 @@
             aria-labelledby="staticBackdropLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        ...
+                    <form action="/test-p" method="post">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @csrf
+                            <input type="hidden" name="model[]" value="user">
+                            <input type="hidden" name="model[]" value="post">
 
-                        ...
+                            <input type="text" name="user[name]" value="John">
+                            <input type="email" name="user[email]" value="john@example.com">
+                            <input type="text" name="post[title]" value="My Post Title">
+                            <textarea name="post[content]">This is my post content.</textarea>
 
-                        ...
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Understood</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Understood</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

@@ -33,6 +33,7 @@ class Item extends Model
     {
         return [
             ['data' => 'id', 'name' => 'id', 'title' => '', 'className' => 'id', 'className' => 'id hidden-column'],
+            ['data' => 'product.name', 'name' => 'product.name', 'title' => 'Nama Produk', 'className' => 'product_name'],
             ['data' => 'item_code', 'name' => 'item_code', 'title' => 'Kode Barang', 'className' => 'item_code'],
             ['data' => 'item_name', 'name' => 'item_name', 'title' => 'Nama Barang', 'className' => 'item_name'],
             ['data' => 'selling_price', 'name' => 'selling_price', 'title' => 'Harga Jual', 'className' => 'selling_price'],
@@ -43,6 +44,7 @@ class Item extends Model
             ['data' => 'category.name', 'name' => 'category.name', 'title' => 'Kategori', 'className' => 'category_name'],
             ['data' => 'employee.person.username', 'name' => 'employee.person.username', 'title' => 'Pegawai', 'className' => 'employee_name'],
             ['data' => 'product_id', 'name' => 'product_id', 'title' => '', 'className' => 'product_id hidden-column'],
+            ['data' => 'unit_id', 'name' => 'unit_id', 'title' => '', 'className' => 'unit_id hidden-column'],
         ];
     }
 
@@ -54,14 +56,15 @@ class Item extends Model
             $r,
             ['title' => 'Produk yang sudah ada?', 'label' => 'Cari produk', 'name' => 'product_id', 'model' => 'product', 'searchColumns' => ['id', 'name'], 'inputs' => ['name'], 'input_type' => 'NewOrExist'],
         );
+        $r[] = ['label' => 'Nama produk', 'name' => 'name', 'type' => 'text', 'input_type' => 'reg'];
         $r[] = ['label' => 'Nama barang', 'name' => 'item_name', 'type' => 'text', 'input_type' => 'reg'];
         $r[] = ['label' => 'Harga Jual', 'name' => 'selling_price', 'type' => 'text', 'input_type' => 'reg'];
-        $r[] = ['label' => 'Unit', 'name' => 'unit.name', 'input_type' => 'select_dropdown', 'selections' => Unit::orderBy('id', 'desc')->get(), 'selection_data' => ['id', 'name']];
+        $r[] = ['label' => 'Unit', 'name' => 'unit_id', 'input_type' => 'select_dropdown', 'selections' => Unit::orderBy('id', 'desc')->get(), 'selection_data' => ['id', 'name']];
         return $r;
     }
     public static function getRelatedModelsName()
     {
-        return ['category', 'unit', 'employee.person'];
+        return ['category', 'unit', 'employee.person', 'product'];
     }
 
     public static function getRules()
@@ -71,7 +74,7 @@ class Item extends Model
             'item_name' => 'required|min:2',
             'selling_price' => 'required|min:2',
             'capital_price' => 'required|min:2',
-            'unit.name' => 'required|',
+            'unit_id' => 'required|',
 
         ];
     }

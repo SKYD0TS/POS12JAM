@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UnitController;
 use App\Models\Customer;
 use App\Models\Employee;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,9 +33,30 @@ Route::post('/login', [LoginController::class, 'login'])->name('login-check');
 Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('/test', function () {
-    $fc = new Customer();
-    $fc = $fc->getFormColumns();
-    return view('test.test', ['formColumns' => $fc, 'modeldata' => ['header' => 'customers']]);
+    $c = new Customer();
+    $fc = $c->getFormColumns();
+    $fr = $c->getRules();
+    return view('test.test');
+});
+
+Route::post('/test-p', function (Request $r) {
+    $modelsData = $r->input('model');
+    $attributesData = $r->except('_token', 'model');
+    $models = [];
+    foreach ($modelsData as $index => $modelName) {
+        $attributes = $attributesData[$modelName];
+
+        // Create a new instance of the model dynamically
+        $model = $modelName;
+
+        // Populate the model with data from the form
+        $models[$model] = ($attributes);
+
+        // Save the model to the database
+    }
+    foreach ($models as $m) {
+        dd($m);
+    }
 });
 
 Route::middleware(['auth'])->group(function () {
